@@ -1,5 +1,6 @@
-//Created by Jack Wang
-//Created on 9/2/2025
+//Created by: Jack Wang
+//9/4/2025
+//use regex find pairs of three uppercase latters, one lowercase letter and three uppercase letters, then extract the lowercase letters
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 

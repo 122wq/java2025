@@ -12,7 +12,7 @@ public class Level4 {
     public static void main(String[] args) throws IOException, URISyntaxException 
     {
         boolean numbers = false;
-        int nums = 63579;
+        int nums = 8022;
         while (numbers == false)
         {
             
@@ -32,26 +32,30 @@ public class Level4 {
             // For binary content, it's better to directly read the bytes from stream and write
             // to the target file.          
             
-            try(BufferedReader br = new BufferedReader(new InputStreamReader(is))) 
+            BufferedReader br = new BufferedReader(new InputStreamReader(is));
+            
+            String result = "";
+            String line = br.readLine();
+            while ((br.readLine()) != null)
             {
-                String result = "";
-                String line = br.readLine();
-                Pattern pattern = Pattern.compile("\\d+");
-                Matcher matcher = pattern.matcher(line.substring(line.length() - 8));
-                while (matcher.find())
-                {
-                    nums = Integer.parseInt(matcher.group());
-                    result += Integer.parseInt(matcher.group());
-                }
-                System.out.println(line.substring(line.length() - 9));
-                if (result.equals(""))
-                {
-                    numbers = true;
-                    System.out.println(line); 
-                    
-                }
-                
+                line += br.readLine();
             }
+            Pattern pattern = Pattern.compile("and the next nothing is (\\d+)");
+            Matcher matcher = pattern.matcher(line);
+            while (matcher.find())
+            {
+                nums = Integer.parseInt(matcher.group(1));
+                result += Integer.parseInt(matcher.group(1));
+            }
+            System.out.println(line);
+            System.out.println(result);
+            if (result.equals(""))
+            {
+                numbers = true;
+                System.out.println(line); 
+                    
+            }
+                
         }
         
     }
