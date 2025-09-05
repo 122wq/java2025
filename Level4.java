@@ -12,7 +12,7 @@ public class Level4 {
     public static void main(String[] args) throws IOException, URISyntaxException 
     {
         boolean numbers = false;
-        int nums = 8022;
+        int nums = 12345;
         while (numbers == false)
         {
             
@@ -34,12 +34,14 @@ public class Level4 {
             
             BufferedReader br = new BufferedReader(new InputStreamReader(is));
             
+            String webpage;
+            String line = "";
             String result = "";
-            String line = br.readLine();
-            while ((br.readLine()) != null)
-            {
-                line += br.readLine();
+
+            while ((webpage = br.readLine()) != null) {
+                line += webpage;
             }
+        
             Pattern pattern = Pattern.compile("and the next nothing is (\\d+)");
             Matcher matcher = pattern.matcher(line);
             while (matcher.find())
@@ -51,14 +53,18 @@ public class Level4 {
             System.out.println(result);
             if (result.equals(""))
             {
-                numbers = true;
-                System.out.println(line); 
-                    
-            }
-                
+                Pattern pattern1 = Pattern.compile("html");
+                Matcher matcher1 = pattern1.matcher(line);
+                if (matcher1.find() == false)
+                {
+                    nums = 8022;
+                }
+                else
+                {
+                    numbers = true;
+                }    
+            }     
         }
-        
-    }
-          
+    }    
 }
     
