@@ -38,7 +38,8 @@ public class Level4 {
             String line = "";
             String result = "";
 
-            while ((webpage = br.readLine()) != null) {
+            while ((webpage = br.readLine()) != null) 
+            {
                 line += webpage;
             }
         
@@ -57,7 +58,7 @@ public class Level4 {
                 Matcher matcher1 = pattern1.matcher(line);
                 if (matcher1.find() == false)
                 {
-                    nums = 8022;
+                    nums = nums / 2;
                 }
                 else
                 {
