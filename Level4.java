@@ -1,3 +1,8 @@
+//Created by: Jack Wang
+//9/4/2025
+//use the URL connection class to get information from the internet, and then use regex to find numbers and change the website url as needed.
+
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
