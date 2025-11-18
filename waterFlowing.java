@@ -7,41 +7,33 @@ public class waterFlowing
 
     public static boolean canFlowOff(int[][] map, int row, int col)
     {
-        int newRow = row;
-        int newCol = col;
-        int num = map[row][col];
         
         if (row > 0 || col > 0 || row < map[0].length - 1 || col < map.legnth - 1)
         {
-            int numUp = map[row - 1][col];
-            int numDown = map[row + 1][col];
-            int numLeft = map[row][col - 1];
-            int numRight = map[row][col + 1];
-            if (numUp < num)
-            {
-                newRow = row - 1; 
-            }
-            else if (numDown < num)
-            {
-                newRow = row + 1; 
-            }
-            else if (numLeft < num)
-            {
-                newCol = col - 1; 
-            }
-            else if (numRight < num)
-            {
-                newCol = col + 1; 
-            }
-            else
-            {
-                return false;
-            }
+            if (map[row - 1][col] < current && canFlowOff(map, row - 1, col)) {
+       	 	return true;
+    		}
+
+    		// DOWN
+    		if (map[row + 1][col] < current &&
+        		canFlowOff(map, row + 1, col)) {
+        		return true;
+    		}
+
+    		// LEFT
+    		if (map[row][col - 1] < current &&
+        		canFlowOff(map, row, col - 1)) {
+        		return true;
+    		}
+
+    		// RIGHT
+    		if (map[row][col + 1] < current &&
+        		canFlowOff(map, row, col + 1)) {
+	        	return true;
+	    	}
+			return false;
         }
-        else{
-            return true;
-        }
-        return canFlowOff(map, newRow, newCol);
+        return true;
     }
     public static void main(String[] args) {
         int[][] map = {
