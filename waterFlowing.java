@@ -47,6 +47,6 @@ public class waterFlowing
 		{200, 98, 6, 200, 200, 200, 200, 200, 200, 200}
 	};
  
-	System.out.println(canFlowOff(map, 4, 4));
+	System.out.println(canFlowOff(map, 4, 5));
     }
 }
