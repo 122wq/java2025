@@ -1,7 +1,7 @@
 public class waterFlowing
 {
     
-	//Pre-condition: nothing is null, row is less than map[0].length, col is less than map.length1
+	//Pre-condition: nothing is null, row is less than map[0].length, col is less than map.length, both row and col are greater than 0
 	//Post-condition: return true or false based on possiblity of reaching the edge
     public static boolean canFlowOff(int[][] map, int row, int col)
     {
