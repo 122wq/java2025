@@ -1,3 +1,6 @@
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class BST {
     Node root;
 
@@ -77,11 +80,8 @@ public class BST {
         {
             child = root;
             Node middle = middle(child, key);
-            if (child.left == null && child.right == null)
-            {
-                root = null;
-            }
-            else if (child.left == null)
+            
+            if (child.left == null)
             {
                 root = child.right;
             }
@@ -188,47 +188,108 @@ public class BST {
         return mid;
     }
 
-    //precondition: none
-    //postcondition: returns a sideways representation of the tree
-    public String toString(){
-        return diagram(root, "");
-    }
-
-    //precondition: none
-    //postcondition: creates a sideways representation of the tree
-    private String diagram(Node node, String space)
+    private ArrayList<ArrayList<Integer>> levels = new ArrayList<>();
+    private void fill(Node node, int height)
     {
         if (node == null)
         {
-            return "";
+            return;
         }
+        if (height == levels.size())
+        {
+            levels.add(new ArrayList<Integer>());
+        }
+        levels.get(height).add(node.key);
+        fill(node.left, height + 1);
+        fill(node.right, height + 1);
+    }
+    //precondition: none
+    //postcondition: returns representation of the tree
+    public String toString()
+    {
+        if (root == null)
+        {
+            return "[]";
+        }   
+        levels.clear();
+        fill(root, 0);
 
         String result = "";
-
-        // right subtree
-        result += diagram(node.right, space + "     ");
-
-        // root
-        result += space;
-        //start of the node has a plus
-        if ((space.length() == 0))
+        for (int i = 0; i < levels.size(); i++)
         {
-            result += "+";
+            result += levels.get(i).toString();
+            result += ",\n";
+            
         }
-        else if (node.key == 67)
-        {
-            result += "!!!";
-        }
-        else if (!(node.right == null && node.right == null))
-        {
-            result += "--";
-        }
-        result += node.key + "\n";
-
-        // left subtree
-        result += diagram(node.left, space + "     ");
-
+    
         return result;
+    }
+
+    public boolean isBSTOrNot() {
+        return isBSTOrNot(this.root, Integer.MIN_VALUE, Integer.MAX_VALUE);
+    }
+
+    private boolean isBSTOrNot(Node root, int minValue, int maxValue) {
+        // check for root is not null or not
+        if (root == null) {
+            return true;
+        }
+        // check for current node value with left node value and right node value and recursively check for left sub tree and right sub tree
+        if(root.key >= minValue && root.key <= maxValue && isBSTOrNot(root.left, minValue, root.key) && isBSTOrNot(root.right, root.key, maxValue)){
+            return true;
+        }
+        return false;
+    }
+
+ 
+
+   // please use the following pieces of code to display your tree in a more easy to follow style (Note* you'll need to place the Trunk class in it's own file)
+    public static void showTrunks(Trunk p)
+    {
+        if (p == null) {
+            return;
+        }
+ 
+        showTrunks(p.prev);
+        System.out.print(p.str);
+    }
+ 
+    public void printTree(){
+        printTree(root, null, false);
+    }
+
+    private void printTree(Node root, Trunk prev, boolean isLeft)
+    {
+        if (root == null) {
+            return;
+        }
+ 
+        String prev_str = "    ";
+        Trunk trunk = new Trunk(prev, prev_str);
+ 
+        printTree(root.right, trunk, true);
+ 
+        if (prev == null) {
+            trunk.str = "———";
+        }
+        else if (isLeft) {
+            trunk.str = ".———";
+            prev_str = "   |";
+        }
+        else {
+            trunk.str = "`———";
+            prev.str = prev_str;
+        }
+ 
+        showTrunks(trunk);
+        System.out.println(" " + root.key);
+ 
+        if (prev != null) {
+            prev.str = prev_str;
+        }
+        trunk.str = "   |";
+ 
+        printTree(root.left, trunk, false);
     }
     
 
