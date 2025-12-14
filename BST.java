@@ -187,6 +187,70 @@ public class BST {
         }
         return mid;
     }
+    //Precondition: subRoot is not null
+    //Postcondition: performs a left rotation on the subRoot
+    public void rotateLeft(Node subRoot, Node prev)
+    {
+        if (subRoot.right == null)
+        {
+            return;
+        }
+        boolean isLeft = false;
+
+        Node temp = subRoot.right;
+        subRoot.right = temp.left;
+        temp.left = subRoot;
+        if (prev == null)
+        {
+            root = temp;
+            return;
+        }
+        else if (prev.left == subRoot)
+        {
+            isLeft = true;
+        }
+        if (isLeft)
+        {
+            prev.left = temp;
+        }
+        else
+        {
+            prev.right = temp;
+        }
+    }
+    //Precondition: subroot is not null
+    //Postcondition: performs a right rotation on the subroot
+    public void rotateRight(Node subRoot, Node prev) 
+    {
+        if (subRoot.left == null)
+        {
+            return;
+        }
+        boolean isLeft = false;
+        
+    
+        Node temp = subRoot.left;
+        subRoot.left = temp.right;
+        temp.right = subRoot;
+        if (prev == null)
+        {
+            root = temp;
+            return;
+        }
+        else if (prev.left == subRoot)
+        {
+            isLeft = true;
+        }
+        if (isLeft)
+        {
+            prev.left = temp;
+        }
+        else
+        {
+            prev.right = temp;
+        }
+        
+    }
 
     private ArrayList<ArrayList<Integer>> levels = new ArrayList<>();
     private void fill(Node node, int height)
