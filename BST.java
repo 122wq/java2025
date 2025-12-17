@@ -355,6 +355,23 @@ public class BST {
  
         printTree(root.left, trunk, false);
     }
+
+    private int height(Node root)
+    {
+        if (root == null)
+        {
+            return -1;
+        }
+        return 1 + Math.max(height(root.left), height(root.right));
+        
+    }
+
+    private int balance(Node node)
+    {
+        return (height(node.left) - height(node.right));
+    }
+
+
     
 
 }
