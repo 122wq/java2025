@@ -17,6 +17,39 @@ public class BST {
         root = insertHelper(key, root);
     }
 
+    private Node balance(Node node)
+    {
+        if (node == null)
+        {
+            return null;
+        }
+
+        int balanceFactor = getBalance(node);
+
+        // left heavy
+        if (balanceFactor > 1)
+        {
+            if (node.left != null && getBalance(node.left) < 0)
+            {
+                // Left-Right case
+                node.left = rotateLeft(node.left);
+            }
+            return rotateRight(node);
+        }
+
+        // right heavy
+        if (balanceFactor < -1)
+        {
+            if (node.right != null && getBalance(node.right) > 0)
+            {
+                // Right-Left case
+                node.right = rotateRight(node.right);
+            }
+            return rotateLeft(node);
+        }
+
+        return node;
+    }
     //Precondition: key is not already in the tree, root is not null
     //Postcondition: key is added to the tree
     private Node insertHelper(int key, Node root)
@@ -33,6 +66,7 @@ public class BST {
         {
            root.right = insertHelper(key, root.right);
         }
+        root = balance(root);
         return root;
     }
 
@@ -73,105 +107,41 @@ public class BST {
         //figure out which of the three worlds you live in 1) removed has no children
         //2) remove has one child
         //3) remove has 2 children
-        Node child;
+        root = removeHelper(root, key);
         
-        // root delete case
-        if (root.key == key)
-        {
-            child = root;
-            Node middle = middle(child, key);
-            
-            if (child.left == null)
-            {
-                root = child.right;
-            }
-            else if (child.right == null)
-            {
-                root = child.left;
-            }
-            else
-            {
-                if (middle != null)
-                {
-                    int mid = middle.key;
-                    remove(middle.key);
-                    root.key = mid;
-                }
-            }
-            return;
-        }
-        
-        Node parent = removeHelper(null, root, key);
-        
-        
-        if (parent.right != null && parent.right.key == key)
-        {
-            child = parent.right;
-            Node middle = middle(child, key);
-            // has only 1 child or 0 child
-            if (child.left == null)
-            {
-                parent.right = child.right;
-            }
-            else if (child.right == null)
-            {
-                parent.right = child.left;
-            }
-            // has 2 children
-            else
-            {
-                if (middle != null)
-                {
-                    int mid = middle.key;
-                    remove(middle.key);
-                    child.key = mid;
-                }
-            }
-        }
-        else if (parent.left != null && parent.left.key == key)
-        {
-            child = parent.left;
-            Node middle = middle(child, key);
-            if (child.left == null)
-            {
-                parent.left = child.right;
-            }
-            else if (child.right == null)
-            {
-                parent.left = child.left;
-            }
-            else
-            {
-                if (middle != null)
-                {
-                    int mid = middle.key;
-                    remove(middle.key);
-                    child.key = mid;
-                }
-            }
-        }
     }
 
     //Precondition: key is in the tree
     //Postcondition: key is removed from the tree and tree is updated as needed
-    private Node removeHelper(Node prev, Node curr,int key)
+    private Node removeHelper(Node root,int key)
     {
-        if (curr == null)
+        if (root == null)
         {
-            return prev;
+            return root;
         }
-        if (curr.key == key)
+        if (key < root.key)
         {
-            return prev;
+            root.left = removeHelper(root.left, key);
         }
-        if (curr.key < key)
+        else if (key > root.key)
         {
-            return removeHelper(curr, curr.right, key);
+            root.right = removeHelper(root.right, key);
         }
         else
         {
-           return removeHelper(curr, curr.left, key);
+            if (root.right == null)
+            {
+                return root.left;
+            }
+            else if (root.left ==null)
+            {
+                return root.right;
+            }
+            Node mid = middle(root, key);
+            root.key = mid.key;
+            root.right = removeHelper(root.right, mid.key);
         }
+        return balance(root);
     }
     //Precondition: key is in the tree, root is not null
     //Postcondition: finds the node that is the leftmost of the right subtree
@@ -189,67 +159,34 @@ public class BST {
     }
     //Precondition: subRoot is not null
     //Postcondition: performs a left rotation on the subRoot
-    public void rotateLeft(Node subRoot, Node prev)
+    //Precondition: subRoot is not null
+    //Postcondition: returns the new root after performing a left rotation on the subRoot
+    private Node rotateLeft(Node subRoot)
     {
-        if (subRoot.right == null)
+        if (subRoot == null || subRoot.right == null)
         {
-            return;
+            return subRoot;
         }
-        boolean isLeft = false;
 
         Node temp = subRoot.right;
         subRoot.right = temp.left;
         temp.left = subRoot;
-        if (prev == null)
-        {
-            root = temp;
-            return;
-        }
-        else if (prev.left == subRoot)
-        {
-            isLeft = true;
-        }
-        if (isLeft)
-        {
-            prev.left = temp;
-        }
-        else
-        {
-            prev.right = temp;
-        }
+        return temp;
     }
+
     //Precondition: subroot is not null
-    //Postcondition: performs a right rotation on the subroot
-    public void rotateRight(Node subRoot, Node prev) 
+    //Postcondition: returns the new root after performing a right rotation on the subroot
+    private Node rotateRight(Node subRoot)
     {
-        if (subRoot.left == null)
+        if (subRoot == null || subRoot.left == null)
         {
-            return;
+            return subRoot;
         }
-        boolean isLeft = false;
-        
-    
+
         Node temp = subRoot.left;
         subRoot.left = temp.right;
         temp.right = subRoot;
-        if (prev == null)
-        {
-            root = temp;
-            return;
-        }
-        else if (prev.left == subRoot)
-        {
-            isLeft = true;
-        }
-        if (isLeft)
-        {
-            prev.left = temp;
-        }
-        else
-        {
-            prev.right = temp;
-        }
-        
+        return temp;
     }
 
     private ArrayList<ArrayList<Integer>> levels = new ArrayList<>();
@@ -271,6 +208,7 @@ public class BST {
     //postcondition: returns representation of the tree
     public String toString()
     {
+        
         if (root == null)
         {
             return "[]";
@@ -366,14 +304,10 @@ public class BST {
         
     }
 
-    private int balance(Node node)
+    private int getBalance(Node node)
     {
         return (height(node.left) - height(node.right));
     }
-
-
-    
-
 }
 class Test
 {
@@ -382,27 +316,20 @@ class Test
         
         // Create a BST with height 4
         tree.insert(8);  
-        tree.insert(4);    
-        tree.insert(12); 
-        tree.insert(2);   
-        tree.insert(6);   
-        tree.insert(10); 
-        tree.insert(14);  
-        tree.insert(1);   
-        tree.insert(3);    
-        tree.insert(5);    
-        tree.insert(7);    
-        tree.insert(9);   
-        tree.insert(11);   
-        tree.insert(13);   
-        tree.insert(15);  
-        tree.insert(67);   
+        tree.insert(4); 
+        tree.insert(12);    
+        tree.insert(2);
+        tree.insert(5);
+        tree.insert(6);
+        tree.insert(10);
+        tree.insert(14);
+        tree.insert(1);
+        tree.insert(3);
+        tree.insert(7);
+        tree.printTree();
+        tree.remove(1);
         
-        System.out.println(tree);
-        tree.remove(4);
-        System.out.println("After removing 4:");
-        System.out.println(tree);
-        System.out.println(tree.search(4));
-        System.out.println(tree.search(6)); 
+        tree.printTree();
+        
     }
 }
