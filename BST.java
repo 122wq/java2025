@@ -66,8 +66,7 @@ public class BST {
         {
            root.right = insertHelper(key, root.right);
         }
-        root = balance(root);
-        return root;
+        return balance(root);
     }
 
     //Precondition: none
@@ -97,8 +96,6 @@ public class BST {
         {
            return searchHelper(key, root.right);
         }
-        
-        
     }
     //Precondition: key is in the tree
     //Postcondition: key is removed from the tree and tree is updated as needed
@@ -208,7 +205,6 @@ public class BST {
     //postcondition: returns representation of the tree
     public String toString()
     {
-        
         if (root == null)
         {
             return "[]";
@@ -221,9 +217,8 @@ public class BST {
         {
             result += levels.get(i).toString();
             result += ",\n";
-            
+
         }
-    
         return result;
     }
 
