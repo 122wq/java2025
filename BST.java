@@ -17,13 +17,15 @@ public class BST {
         root = insertHelper(key, root);
     }
 
+    //Precondition: nothing
+    //Postcondition: return balanced nodes
     private Node balance(Node node)
     {
         if (node == null)
         {
             return null;
         }
-
+        //balance of the node
         int balanceFactor = getBalance(node);
 
         // left heavy
@@ -60,12 +62,15 @@ public class BST {
         }
         else if (root.key > key)
         {
+            //go to the left if the root key is smaller than the key
             root.left = insertHelper(key, root.left);
         }
         else
         {
-           root.right = insertHelper(key, root.right);
+            //go to the right if the root key is larger than the key
+            root.right = insertHelper(key, root.right);
         }
+        //balance the tree as it runs
         return balance(root);
     }
 
@@ -288,7 +293,8 @@ public class BST {
  
         printTree(root.left, trunk, false);
     }
-
+    //Precondition: none
+    //Postcondition: returns the height of the node
     private int height(Node root)
     {
         if (root == null)
@@ -298,7 +304,8 @@ public class BST {
         return 1 + Math.max(height(root.left), height(root.right));
         
     }
-
+    //precondition: none
+    //postcondidion: returns the balance of the node
     private int getBalance(Node node)
     {
         return (height(node.left) - height(node.right));
@@ -323,8 +330,8 @@ class Test
         tree.insert(7);
         tree.printTree();
         tree.remove(1);
-        
+        tree.remove(3);
+        tree.remove(2);
         tree.printTree();
-        
     }
 }
