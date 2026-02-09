@@ -3,6 +3,7 @@ public class Heap {
 //the actual storage structure for your heap
 
 private int[] arr;
+private int height;
 
  
 
@@ -31,14 +32,12 @@ arr = new int[100];
 // 5 points
 
 public void add(int toAdd) {
-    if (arr.length == 0)
-    {
-        arr[0] = toAdd;
-    }
-    else
-    {
-        arr[arr.length-1] = toAdd;
-    }
+    
+
+    arr[height] = toAdd;
+    siftUp(height);
+    height++;
+    
 }
 
  
@@ -55,7 +54,16 @@ public void removeMax() {}
 
 //3 points
 
-private void siftUp(int index) {}
+private void siftUp(int index) 
+{
+    while (index > 0 && arr[index] > arr[(index - 1) / 2])
+    {
+        int temp = arr[(index - 1) / 2];
+        arr[(index - 1) / 2] = arr[index];
+        arr[index] = temp;
+        index = (index - 1) / 2;
+    }
+}
 
  
 
@@ -65,10 +73,34 @@ private void siftUp(int index) {}
 
 private void siftDown(int index) {}
 
+public void printArr()
+{
+    for (int i = 0; i < height; i++)
+    {
+        System.out.print(arr[i] + " ");
+    }
+}
+
  
 
 //4 points for syntax conventions.
 
  
 
+}
+class Main 
+{
+    public static void main(String[] args) {
+        Heap a = new Heap();
+        
+        a.add(344);
+        a.add(14);
+        a.add(34);
+        a.add(564);
+        a.add(33);
+        
+        
+        a.printArr();
+    }
+    
 }
