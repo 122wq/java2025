@@ -46,7 +46,14 @@ public void add(int toAdd) {
 
 //5 points
 
-public void removeMax() {}
+public void removeMax() 
+{
+    arr[0] = arr[height - 1];
+    arr[height - 1] = 0;
+    height--;
+
+    siftDown(0);
+}
 
  
 
@@ -71,7 +78,24 @@ private void siftUp(int index)
 
 //3 points
 
-private void siftDown(int index) {}
+private void siftDown(int index) {
+    while (index < height && (arr[index] < arr[2 * (index) + 1]) || (arr[index] < arr[2 * (index) + 2]))
+    {
+        int temp = Math.max(arr[2 * (index) + 1], arr[2 * (index) + 2]);
+        if (temp == arr[2 * (index) + 2])
+        {
+            arr[2 * (index) + 2] = arr[index];
+            arr[index] = temp;
+            index = 2 * (index) + 2;
+        }
+        else
+        {
+            arr[2 * (index) + 1] = arr[index];
+            arr[index] = temp;
+            index = 2 * (index) + 1;
+        }
+    }
+}
 
 public void printArr()
 {
@@ -79,6 +103,7 @@ public void printArr()
     {
         System.out.print(arr[i] + " ");
     }
+    System.out.println("");
 }
 
  
@@ -93,13 +118,22 @@ class Main
     public static void main(String[] args) {
         Heap a = new Heap();
         
-        a.add(344);
+        a.add(44);
         a.add(14);
         a.add(34);
-        a.add(564);
+        a.add(64);
         a.add(33);
+        a.add(13);
+        a.add(24);
+        a.add(54);
+        a.add(43);
+        a.add(23);
+        a.add(324);
+        a.add(15);
         
         
+        a.printArr();
+        a.removeMax();
         a.printArr();
     }
     
