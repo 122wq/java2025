@@ -30,7 +30,8 @@ public Heap() {
 //all heap properties must be preserved
 
 // 5 points
-
+//precondition: int is greater than 0
+//postcondition: return a heap following heap rules
 public void add(int toAdd) 
 {
     arr[height] = toAdd;
@@ -44,7 +45,8 @@ public void add(int toAdd)
 //remove the largest element of the heap (the root) and re-heapafy
 
 //5 points
-
+//precondition: the heap follows all heap rules.
+//postcondition: remove the largest (top) value and adjust the heap as needed
 public void removeMax() 
 {
     arr[0] = arr[height - 1];
@@ -58,7 +60,8 @@ public void removeMax()
 //this should check and alter the tree after an item is inserted
 
 //3 points
-
+//precondition: index is positive and arr has less than 100 items
+//postcondition: move the variable up until heap rules are satisfied
 private void siftUp(int index) 
 {
     while (index > 0 && arr[index] > arr[(index - 1) / 2])
@@ -75,7 +78,8 @@ private void siftUp(int index)
 //this should check and alter the tree after an item is deleted.
 
 //3 points
-
+//precondition: index is positive and arr has less than 100 items
+//postcondition: move the variable down until heap rules are satisfied
 private void siftDown(int index) 
 {
     while (index < height && (arr[index] < arr[2 * (index) + 1]) || (arr[index] < arr[2 * (index) + 2]))
@@ -95,7 +99,8 @@ private void siftDown(int index)
         }
     }
 }
-
+//precondition: none
+//postcondition: print the heap
 public void printArr()
 {
     for (int i = 0; i < height; i++)
