@@ -110,5 +110,28 @@ public class HashTable {
     private String removeNewlines(String value) {
         return value.replaceAll("\r|\n", " ");
     }
-}
 
+
+
+    private class MyIterator implements Iterator
+    {
+
+        @Override
+        public boolean hasNext() {
+            // TODO Auto-generated method stub
+            throw new UnsupportedOperationException("Unimplemented method 'hasNext'");
+        }
+
+        @Override
+        public Object next() {
+            // TODO Auto-generated method stub
+            throw new UnsupportedOperationException("Unimplemented method 'next'");
+        }
+
+        @Override
+        public void remove()
+        {
+        
+        }
+    }
+}
