@@ -82,7 +82,7 @@ private void siftUp(int index)
 //postcondition: move the variable down until heap rules are satisfied
 private void siftDown(int index) 
 {
-    while (index < height && (arr[index] < arr[2 * (index) + 1]) || (arr[index] < arr[2 * (index) + 2]))
+    while ((index + 1) * 2 < arr.length && index < height && (arr[index] < arr[2 * (index) + 1]) || (arr[index] < arr[2 * (index) + 2]))
     {
         int temp = Math.max(arr[2 * (index) + 1], arr[2 * (index) + 2]);
         if (temp == arr[2 * (index) + 2])
