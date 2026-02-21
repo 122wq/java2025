@@ -13,10 +13,14 @@ public class HashTable {
 
 // Methods you have to supply:
 //
+    //precondition: key is not null
+    //postcondition: key is added to this HashTable, hashsize will increase, if the hashtable is more than 2/3 full (indicated by hashsize) it will double the size of the array and rehash all the keys
     public void put(String key) {
+        //get the hashcode and mod it to the length of the array
         int hash = key.hashCode();
         hash = Math.abs(hash % arr.length);
 
+        //make a new arrylist if there isn't anything at the arr[hash]
         if (arr[hash] == null)
         {
             arr[hash] = new ArrayList<String>();
@@ -24,6 +28,7 @@ public class HashTable {
         arr[hash].add(key);
         hashSize++;
 
+        //double the array length if it is more than 67% full and and rehash everything
         if ((hashSize / 100.00) > 0.67)
         {
             ArrayList<String>[] newArr = new ArrayList[arr.length * 2];
@@ -48,7 +53,8 @@ public class HashTable {
             
         }
     }
-
+    //precondition: key is not null
+    //postcondition: if key is in the hashtable, return the key, return null otherwise
     public String get(String key){
         int hash = Math.abs(key.hashCode() % arr.length);
     
@@ -65,10 +71,11 @@ public class HashTable {
         }
         return null;
     }
-
+    //Precondition: key is not null
+    //Postcondition: key is removed from this hashTable and returned. If key is not in this HashTable, null is returned.
     public String remove(String key){
         int hash = Math.abs(key.hashCode() % arr.length);
-        //look through the arr[hash] arrayList (if one exists) and return key if you find it. return null if it's not in there
+        //look through the arr[hash] arrayList (if one exists) and remove and return the key if you find it. return null if it's not in there
         if (arr[hash] != null)
         {
             for (int i = 0; i < arr[hash].size(); i++)
@@ -88,7 +95,8 @@ public class HashTable {
     public Iterator keys() {
         return new MyIterator();
     }
-//
+//  //precondition: none
+//  //postcondition: prints the keys in this hahstable by hashcode
     public void print(){
         Iterator i = new MyIterator();
         while (i.hasNext())
@@ -201,30 +209,34 @@ public class HashTable {
             //To access the first element of, the posList starts at -1, so when the first element is accessed, it will be increased to 0, the other aeeays will start at 0 as they will be already accessed when the postArr changed
             posList = -1;
         }
+        //precondition: none
+        //postcondition: returns true if there is another key in this hashtable, false otherwise
         @Override
         public boolean hasNext() {
             // TODO Auto-generated method stub
             int currPos = posArr;
             if (posArr < arr.length)
             {
+                //check if the array is no null, then make sure the arrayList has not been fully traversed
                 if (arr[posArr] != null && (posList + 1) < arr[posArr].size())
                 {
                     return true;
                 } 
                 else
                 {
-                    //increase currPos if the next array element is null, until it finds a non-null element or it searches the entire array (no next value)
+                    //increase currPos if the next array element is null or everything was deleted, until it finds a non-null element or it searches the entire array (no next value)
                     while ((currPos + 1) < arr.length && (arr[currPos + 1] == null || arr[currPos + 1].isEmpty()))
                     {
                         currPos++;
                     }
-                    //if currPos + 1 is the arr length, it means that the entire array was search and there is no next value that exist, so returns true
+                    //if currPos + 1 is the arr length, it means that the entire array was search and  no next value that exist, so returns false
                     return((currPos + 1) != arr.length);
                 }
             }
             return false;
         }
-
+        //precondition: none
+        //postcondition: returns the next key in this hashtable, return null if there is no next key
         @Override
         public Object next() {
             // TODO Auto-generated method stub
@@ -247,7 +259,7 @@ public class HashTable {
                         }
                         posArr = currPos + 1;
                         posList = 0; 
-                        //if currPos + 1 is the arr length, it means that the entire array was search and there is no next value that exist, so returns true
+                        //returns the first element of the next non-null and non-empty arrayList elements if the entire array is not traversed
                         if (posArr < arr.length)
                         {
                             return arr[posArr].get(0);
