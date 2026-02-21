@@ -198,6 +198,7 @@ public class HashTable {
         public MyIterator()
         {
             posArr = 0;
+            //To access the first element of, the posList starts at -1, so when the first element is accessed, it will be increased to 0, the other aeeays will start at 0 as they will be already accessed when the postArr changed
             posList = -1;
         }
         @Override
@@ -245,7 +246,7 @@ public class HashTable {
                             currPos++;
                         }
                         posArr = currPos + 1;
-                        posList = 0;
+                        posList = 0; 
                         //if currPos + 1 is the arr length, it means that the entire array was search and there is no next value that exist, so returns true
                         if (posArr < arr.length)
                         {
@@ -270,6 +271,170 @@ public class HashTable {
 {
     public static void main(String[] args)
     {
-        
+        HashTable hashTable = new HashTable();
+
+        String key1 = "FB";
+        String key2 = "Ea";
+
+        System.out.println("key1 hash: " + key1.hashCode());
+        System.out.println("key2 hash: " + key2.hashCode());
+
+        if (key1.hashCode() != key2.hashCode())
+        {
+            System.out.println("[FAIL] keys do not collide");
+            return;
+        }
+
+        hashTable.put(key1);
+        hashTable.put(key2);
+
+        boolean get1Ok = key1.equals(hashTable.get(key1));
+        boolean get2Ok = key2.equals(hashTable.get(key2));
+
+        if (get1Ok && get2Ok)
+        {
+            System.out.println("[PASS] collision get test");
+        }
+        else
+        {
+            System.out.println("[FAIL] collision get test");
+        }
+
+        boolean sameArrayListOk = verifySameCollisionBucket(hashTable, key1, key2);
+        if (sameArrayListOk)
+        {
+            System.out.println("[PASS] collision same-bucket ArrayList test");
+        }
+        else
+        {
+            System.out.println("[FAIL] collision same-bucket ArrayList test");
+        }
+
+        Iterator iterator = hashTable.keys();
+        Set<String> iteratedKeys = new HashSet<String>();
+        while (iterator.hasNext())
+        {
+            iteratedKeys.add((String) iterator.next());
+        }
+
+        boolean iteratorOk = iteratedKeys.contains(key1) && iteratedKeys.contains(key2);
+        if (iteratorOk)
+        {
+            System.out.println("[PASS] collision iterator test");
+        }
+        else
+        {
+            System.out.println("[FAIL] collision iterator test");
+        }
+
+        HashTable iteratorTestTable = new HashTable();
+        iteratorTestTable.put(key1);
+        iteratorTestTable.put(key2);
+        iteratorTestTable.put(key1);
+
+        boolean iteratorPrintsEveryElementOk = verifyIteratorPrintsEveryElementInCollisionBucket(iteratorTestTable, key1, key2);
+        if (iteratorPrintsEveryElementOk)
+        {
+            System.out.println("[PASS] iterator prints every element in collision ArrayList test");
+        }
+        else
+        {
+            System.out.println("[FAIL] iterator prints every element in collision ArrayList test");
+        }
+
+        String removed = hashTable.remove(key1);
+        boolean removeOk = key1.equals(removed) && hashTable.get(key1) == null && key2.equals(hashTable.get(key2));
+
+        if (removeOk)
+        {
+            System.out.println("[PASS] collision remove test");
+        }
+        else
+        {
+            System.out.println("[FAIL] collision remove test");
+        }
+    }
+
+    private static boolean verifySameCollisionBucket(HashTable hashTable, String key1, String key2)
+    {
+        try
+        {
+            java.lang.reflect.Field arrayField = HashTable.class.getDeclaredField("arr");
+            arrayField.setAccessible(true);
+
+            ArrayList<String>[] buckets = (ArrayList<String>[]) arrayField.get(hashTable);
+            int index1 = Math.floorMod(key1.hashCode(), buckets.length);
+            int index2 = Math.floorMod(key2.hashCode(), buckets.length);
+
+            if (index1 != index2)
+            {
+                return false;
+            }
+
+            ArrayList<String> collisionBucket = buckets[index1];
+            if (collisionBucket == null)
+            {
+                return false;
+            }
+
+            return collisionBucket.contains(key1) && collisionBucket.contains(key2) && buckets[index1] == buckets[index2];
+        }
+        catch (Exception exception)
+        {
+            return false;
+        }
+    }
+
+    private static boolean verifyIteratorPrintsEveryElementInCollisionBucket(HashTable hashTable, String key1, String key2)
+    {
+        try
+        {
+            java.lang.reflect.Field arrayField = HashTable.class.getDeclaredField("arr");
+            arrayField.setAccessible(true);
+
+            ArrayList<String>[] buckets = (ArrayList<String>[]) arrayField.get(hashTable);
+            int bucketIndex = Math.floorMod(key1.hashCode(), buckets.length);
+            ArrayList<String> collisionBucket = buckets[bucketIndex];
+            if (collisionBucket == null)
+            {
+                return false;
+            }
+
+            int expectedKey1Count = 0;
+            int expectedKey2Count = 0;
+            for (String value : collisionBucket)
+            {
+                if (key1.equals(value))
+                {
+                    expectedKey1Count++;
+                }
+                if (key2.equals(value))
+                {
+                    expectedKey2Count++;
+                }
+            }
+
+            int iteratedKey1Count = 0;
+            int iteratedKey2Count = 0;
+            Iterator iterator = hashTable.keys();
+            while (iterator.hasNext())
+            {
+                String nextValue = (String) iterator.next();
+                if (key1.equals(nextValue))
+                {
+                    iteratedKey1Count++;
+                }
+                if (key2.equals(nextValue))
+                {
+                    iteratedKey2Count++;
+                }
+            }
+
+            return iteratedKey1Count == expectedKey1Count && iteratedKey2Count == expectedKey2Count;
+        }
+        catch (Exception exception)
+        {
+            return false;
+        }
     }
 }
