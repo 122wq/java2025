@@ -8,15 +8,17 @@ public class PrimeThread{
     //this provided thread calls functions you will need to run in order to calculate the number of threads between the provided min and max values.
     public static class CountPrimesThread extends Thread {
         int count = 0;
-        int min, max;
-        public CountPrimesThread(int min, int max) {
-            this.min = min;
-            this.max = max;
+        int min1, max1, min2, max2;
+        public CountPrimesThread(int min1, int max1, int min2, int max2) {
+            this.min1 = min1;
+            this.max1 = max1;
+            this.min2 = min2;
+            this.max2 = max2;
         }
         public void run() {
-            count = countPrimes(min,max);
+            count = countPrimes(min1,max1, min2, max2);
             System.out.println("There are " + count + 
-                    " primes between " + min + " and " + max);
+                    " primes between " + min1 + " and " + max1 + " plus " + min2 + " and " + max2);
             sendBack(count);
         }
     }
@@ -32,14 +34,21 @@ public class PrimeThread{
      * Count the primes between min and max, inclusive.
      * you need to implement this!
      */
-    private static int countPrimes(int min, int max) {
+    private static int countPrimes(int min1, int max1, int min2, int max2) {
         int count = 0;
-        for (int i = min; i <= max; i++)
+        for (int i = min1; i <= max1; i++)
         {
             if (isPrime(i))
             {
                 count++;
             }
+        }
+        for (int j = min2; j <= max2; j++)
+        {
+           if (isPrime(j))
+            {
+                count++;
+            } 
         }
         return count;
     }
@@ -54,7 +63,7 @@ public class PrimeThread{
         {
             return false;
         }
-        for (int i = 2; i < x; i++)
+        for (int i = 2; i <= x / 2; i++)
         {
             if (x % i == 0)
             {
@@ -94,7 +103,7 @@ public class PrimeThread{
        CountPrimesThread[] threadArr = new CountPrimesThread[threads];
        for (int i = 0; i < threadArr.length; i++)
        {
-            threadArr[i] = new CountPrimesThread(i*max/threads, (i+1)*max/threads);
+            threadArr[i] = new CountPrimesThread((i*max)/(2*threads), ((i+1)*max)/(2*threads), max - (i+1)*max/(2*threads), max - (i)*max/(2*threads));
             threadArr[i].start();
        }
        for (int i = 0; i< threads; i++)
