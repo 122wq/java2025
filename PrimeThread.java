@@ -103,6 +103,7 @@ public class PrimeThread{
        CountPrimesThread[] threadArr = new CountPrimesThread[threads];
        for (int i = 0; i < threadArr.length; i++)
        {
+            //the threads would have half of its numbers been the smallest, the other half being largest
             threadArr[i] = new CountPrimesThread((i*max)/(2*threads), ((i+1)*max)/(2*threads), max - (i+1)*max/(2*threads), max - (i)*max/(2*threads));
             threadArr[i].start();
        }
